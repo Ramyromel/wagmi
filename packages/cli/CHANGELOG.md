@@ -1,5 +1,11 @@
 # @wagmi/cli
 
+## 2.1.2
+
+### Patch Changes
+
+- [#3616](https://github.com/wevm/wagmi/pull/3616) [`2a9f4473`](https://github.com/wevm/wagmi/commit/2a9f4473adc5bcdddf388389387ed5459583769e) Thanks [@petermazzocco](https://github.com/petermazzocco)! - Added Holesky Testnet to Etherscan Plugin
+
 ## 2.1.1
 
 ### Patch Changes
