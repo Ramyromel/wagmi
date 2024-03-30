@@ -14,7 +14,7 @@
     "@tanstack/query-sync-storage-persister": "5.0.5",
     "@tanstack/react-query": ">=5.0.0",
     "@tanstack/react-query-devtools": "5.0.5",
-    "@tanstack/react-query-persist-client": "5.0.5",
+    "@tanstack/react-query-persist-client": "5.25.0",
     "@vitejs/plugin-react": "^4.1.0",
     "buffer": "^6.0.3",
     "compression": "^1.7.4",
