@@ -8,6 +8,17 @@ import { version } from './version.js'
 
 const cli = cac('wagmi')
 
+/**
+ * Command to generate code based on configuration.
+ * 
+ * Options:
+ * - `-c, --config <path>`: Path to config file (string)
+ * - `-r, --root <path>`: Root path to resolve config from (string)
+ * - `-w, --watch`: Watch for changes (boolean)
+ * 
+ * Example:
+ * wagmi generate
+ */
 cli
   .command('generate', 'generate code based on configuration')
   .option('-c, --config <path>', '[string] path to config file')
@@ -16,6 +27,16 @@ cli
   .example((name) => `${name} generate`)
   .action(async (options: Generate) => await generate(options))
 
+/**
+ * Command to create configuration file.
+ * 
+ * Options:
+ * - `-c, --config <path>`: Path to config file (string)
+ * - `-r, --root <path>`: Root path to resolve config from (string)
+ * 
+ * Example:
+ * wagmi init
+ */
 cli
   .command('init', 'create configuration file')
   .option('-c, --config <path>', '[string] path to config file')

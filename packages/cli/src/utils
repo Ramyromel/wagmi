@@ -1,0 +1,31 @@
+import { expect, test } from 'vitest';
+import { findConfig } from './findConfig';
+import { format } from './format';
+import { getAddressDocString } from './getAddressDocString';
+import { getIsUsingTypeScript } from './getIsUsingTypeScript';
+import { resolveConfig } from './resolveConfig';
+
+test('findConfig', async () => {
+  const configPath = await findConfig();
+  expect(configPath).toBeDefined();
+});
+
+test('format', async () => {
+  const formatted = await format('const x = 1;');
+  expect(formatted).toBe('const x = 1;\n');
+});
+
+test('getAddressDocString', () => {
+  const docString = getAddressDocString({ address: '0x123' });
+  expect(docString).toBeDefined();
+});
+
+test('getIsUsingTypeScript', async () => {
+  const isUsingTypeScript = await getIsUsingTypeScript();
+  expect(isUsingTypeScript).toBeBoolean();
+});
+
+test('resolveConfig', async () => {
+  const config = await resolveConfig({ configPath: 'path/to/config' });
+  expect(config).toBeDefined();
+});

@@ -84,12 +84,18 @@ export async function init(options: Init = {}) {
     `)
   }
 
-  const formatted = await format(content)
-  await fs.writeFile(outPath, formatted)
-  spinner.succeed()
-  logger.success(
-    `Config created at ${pc.gray(relative(process.cwd(), outPath))}`,
-  )
+  try {
+    const formatted = await format(content)
+    await fs.writeFile(outPath, formatted)
+    spinner.succeed()
+    logger.success(
+      `Config created at ${pc.gray(relative(process.cwd(), outPath))}`,
+    )
+  } catch (error) {
+    spinner.fail()
+    logger.error(`Failed to create config: ${(error as Error).message}`)
+    throw error
+  }
 
   return outPath
 }

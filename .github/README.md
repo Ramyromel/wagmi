@@ -66,6 +66,76 @@ For casual chit-chat with others using the framework:
 
 Contributions to Wagmi are greatly appreciated! If you're interested in contributing to Wagmi, please read the [Contributing Guide](https://wagmi.sh/dev/contributing) **before submitting a pull request**.
 
+## Examples and Use Cases
+
+Here are some examples and use cases to help you understand how to use Wagmi:
+
+### Example 1: Fetching Account Balance
+
+```typescript
+import { useAccount, useBalance } from 'wagmi'
+
+function AccountBalance() {
+  const { address } = useAccount()
+  const { data, isError, isLoading } = useBalance({
+    address,
+  })
+
+  if (isLoading) return <div>Fetching balance...</div>
+  if (isError) return <div>Error fetching balance</div>
+  return <div>Balance: {data?.formatted} {data?.symbol}</div>
+}
+```
+
+### Example 2: Sending a Transaction
+
+```typescript
+import { useAccount, useSendTransaction } from 'wagmi'
+import { parseEther } from 'ethers/lib/utils'
+
+function SendTransaction() {
+  const { address } = useAccount()
+  const { sendTransaction } = useSendTransaction()
+
+  const handleSend = async () => {
+    try {
+      await sendTransaction({
+        to: '0xRecipientAddress',
+        value: parseEther('0.01'),
+      })
+      alert('Transaction sent!')
+    } catch (error) {
+      alert('Error sending transaction')
+    }
+  }
+
+  return (
+    <div>
+      <button onClick={handleSend}>Send 0.01 ETH</button>
+    </div>
+  )
+}
+```
+
+### Example 3: Reading from a Smart Contract
+
+```typescript
+import { useContractRead } from 'wagmi'
+import { abi } from './MyContract.json'
+
+function ReadContract() {
+  const { data, isError, isLoading } = useContractRead({
+    address: '0xContractAddress',
+    abi,
+    functionName: 'myFunction',
+  })
+
+  if (isLoading) return <div>Loading...</div>
+  if (isError) return <div>Error reading contract</div>
+  return <div>Data: {data}</div>
+}
+```
+
 ## Sponsors
 
 If you find Wagmi useful or use it for work, please consider [sponsoring Wagmi](https://github.com/sponsors/wevm?metadata_campaign=gh_readme_support). Thank you 🙏
