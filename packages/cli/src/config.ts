@@ -3,6 +3,12 @@ import { type Address } from 'viem'
 
 import { type Evaluate, type MaybeArray, type MaybePromise } from './types.js'
 
+/**
+ * Configuration for a contract.
+ * 
+ * @template chainId - The chain ID type.
+ * @template requiredChainId - The required chain ID type.
+ */
 export type ContractConfig<
   chainId extends number = number,
   requiredChainId extends number | undefined = undefined,
@@ -37,6 +43,9 @@ export type ContractConfig<
   name: string
 }
 
+/**
+ * Represents a contract with additional metadata.
+ */
 export type Contract = Evaluate<
   ContractConfig & {
     /** Generated string content */
@@ -50,6 +59,9 @@ export type Contract = Evaluate<
   }
 >
 
+/**
+ * Configuration for watching file changes.
+ */
 export type Watch = {
   /** Command to run along with watch process */
   command?: (() => MaybePromise<void>) | undefined
@@ -67,6 +79,9 @@ export type Watch = {
   onRemove?: ((path: string) => MaybePromise<string | undefined>) | undefined
 }
 
+/**
+ * Represents a plugin with various hooks and configurations.
+ */
 export type Plugin = {
   /** Contracts provided by plugin */
   contracts?: (() => MaybePromise<ContractConfig[]>) | undefined
@@ -100,6 +115,9 @@ export type Plugin = {
   watch?: Watch | undefined
 }
 
+/**
+ * Configuration for the CLI.
+ */
 export type Config = {
   /** Contracts to use in commands */
   contracts?: ContractConfig[] | undefined
@@ -109,12 +127,21 @@ export type Config = {
   plugins?: Plugin[] | undefined
 }
 
+/**
+ * Defines the configuration for the CLI.
+ * 
+ * @param config - The configuration object or function.
+ * @returns The configuration.
+ */
 export function defineConfig(
   config: MaybeArray<Config> | (() => MaybePromise<MaybeArray<Config>>),
 ) {
   return config
 }
 
+/**
+ * Default configuration for the CLI.
+ */
 export const defaultConfig = {
   out: 'src/generated.ts',
   contracts: [],
