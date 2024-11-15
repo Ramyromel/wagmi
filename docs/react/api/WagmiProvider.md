@@ -110,3 +110,29 @@ function App() {
 ```ts
 import { type WagmiContext } from 'wagmi'
 ```
+
+## Setting up the WagmiProvider
+
+To set up the `WagmiProvider` with the appropriate configuration, follow these steps:
+
+1. Import the `WagmiProvider` from the `wagmi` package.
+2. Create a configuration object using the `createConfig` function from the `wagmi` package.
+3. Wrap your application in the `WagmiProvider` and pass the configuration object as a prop.
+
+```tsx
+import { WagmiProvider, createConfig } from 'wagmi'
+
+const config = createConfig({
+  // Your configuration options here
+})
+
+function App() {
+  return (
+    <WagmiProvider config={config}>
+      {/** ... */}
+    </WagmiProvider>
+  )
+}
+```
+
+For more details on creating the configuration object, refer to the documentation in `docs/react/api/createConfig.md`.
