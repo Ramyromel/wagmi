@@ -10,19 +10,19 @@ To manually add Wagmi CLI to your project, install the required packages.
 
 ::: code-group
 ```bash [pnpm]
-pnpm add -D @wagmi/cli
+pnpm add -D @wagmi/cli prettier eslint vitest
 ```
 
 ```bash [npm]
-npm install --save-dev @wagmi/cli
+npm install --save-dev @wagmi/cli prettier eslint vitest
 ```
 
 ```bash [yarn]
-yarn add -D @wagmi/cli
+yarn add -D @wagmi/cli prettier eslint vitest
 ```
 
 ```bash [bun]
-bun add -D @wagmi/cli
+bun add -D @wagmi/cli prettier eslint vitest
 ```
 :::
 
@@ -156,6 +156,75 @@ const { data } = useReadErc20BalanceOf({
 
 ::: tip
 Instead of committing the `out` file, you likely want to add `out` to your `.gitignore` and run `generate` during the build process or before you start your dev server in a `"predev"` script.
+:::
+
+## Run Prettier and ESLint
+
+To ensure code quality and consistency, you can use Prettier for code formatting and ESLint for linting. Add the following scripts to your `package.json`:
+
+```json
+{
+  "scripts": {
+    "prettier:format": "prettier --write .",
+    "eslint:lint": "eslint . --ext .js,.ts,.tsx"
+  }
+}
+```
+
+Run the following commands to format and lint your code:
+
+::: code-group
+```bash [pnpm]
+pnpm prettier:format
+pnpm eslint:lint
+```
+
+```bash [npm]
+npm run prettier:format
+npm run eslint:lint
+```
+
+```bash [yarn]
+yarn prettier:format
+yarn eslint:lint
+```
+
+```bash [bun]
+bun run prettier:format
+bun run eslint:lint
+```
+:::
+
+## Run Tests Using Vitest
+
+To run tests using Vitest, add the following script to your `package.json`:
+
+```json
+{
+  "scripts": {
+    "test:run": "vitest run"
+  }
+}
+```
+
+Run the following command to execute the tests:
+
+::: code-group
+```bash [pnpm]
+pnpm test:run
+```
+
+```bash [npm]
+npm run test:run
+```
+
+```bash [yarn]
+yarn test:run
+```
+
+```bash [bun]
+bun run test:run
+```
 :::
 
 ## Next Steps

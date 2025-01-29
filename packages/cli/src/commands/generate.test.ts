@@ -401,9 +401,238 @@ test('behavior: displays message if using --watch flag without watchers configur
         `)
 })
 
-test.todo('behavior: save config file logs change')
-test.todo('behavior: updates on add file')
-test.todo('behavior: updates on change file')
-test.todo('behavior: updates on unlink file')
-test.todo('behavior: runs watch command')
-test.todo('behavior: shuts down watch on SIGINT/SIGTERM')
+test('fix failing test: generates output with plugin', async () => {
+  const { dir } = await createFixture({
+    files: {
+      tsconfig: true,
+      'wagmi.config.ts': dedent`
+          export default {
+            out: 'generated.ts',
+            contracts: [
+              {
+                abi: [],
+                name: 'Foo',
+              },
+            ],
+            plugins: [
+              {
+                name: 'Test',
+                async run({ contracts, isTypeScript, outputs }) {
+                  return {
+                    imports: '/* imports test */',
+                    prepend: '/* prepend test */',
+                    content: '/* content test */',
+                  }
+                },
+              },
+            ],
+          }
+        `,
+    },
+  })
+  const spy = vi.spyOn(process, 'cwd')
+  spy.mockImplementation(() => dir)
+
+  await generate()
+
+  expect(console.formatted).toMatchInlineSnapshot(`
+      "- Validating plugins
+      ✔ Validating plugins
+      - Resolving contracts
+      ✔ Resolving contracts
+      - Running plugins
+      ✔ Running plugins
+      - Writing to generated.ts
+      ✔ Writing to generated.ts"
+    `)
+  /* eslint-disable no-irregular-whitespace */
+  await expect(
+    readFile(resolve(dir, 'generated.ts'), 'utf8'),
+  ).resolves.toMatchInlineSnapshot(`
+      "/* imports test */
+
+      /* prepend test */
+
+      //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+      // Foo
+      //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+      export const fooAbi = [] as const
+
+      //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+      // Test
+      //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+      /* content test */
+      "
+    `)
+  /* eslint-enable no-irregular-whitespace */
+})
+
+test('add new test: generates output with multiple plugins', async () => {
+  const { dir } = await createFixture({
+    files: {
+      tsconfig: true,
+      'wagmi.config.ts': dedent`
+          export default {
+            out: 'generated.ts',
+            contracts: [
+              {
+                abi: [],
+                name: 'Foo',
+              },
+            ],
+            plugins: [
+              {
+                name: 'Test1',
+                async run({ contracts, isTypeScript, outputs }) {
+                  return {
+                    imports: '/* imports test1 */',
+                    prepend: '/* prepend test1 */',
+                    content: '/* content test1 */',
+                  }
+                },
+              },
+              {
+                name: 'Test2',
+                async run({ contracts, isTypeScript, outputs }) {
+                  return {
+                    imports: '/* imports test2 */',
+                    prepend: '/* prepend test2 */',
+                    content: '/* content test2 */',
+                  }
+                },
+              },
+            ],
+          }
+        `,
+    },
+  })
+  const spy = vi.spyOn(process, 'cwd')
+  spy.mockImplementation(() => dir)
+
+  await generate()
+
+  expect(console.formatted).toMatchInlineSnapshot(`
+      "- Validating plugins
+      ✔ Validating plugins
+      - Resolving contracts
+      ✔ Resolving contracts
+      - Running plugins
+      ✔ Running plugins
+      - Writing to generated.ts
+      ✔ Writing to generated.ts"
+    `)
+  /* eslint-disable no-irregular-whitespace */
+  await expect(
+    readFile(resolve(dir, 'generated.ts'), 'utf8'),
+  ).resolves.toMatchInlineSnapshot(`
+      "/* imports test1 */
+
+      /* imports test2 */
+
+      /* prepend test1 */
+
+      /* prepend test2 */
+
+      //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+      // Foo
+      //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+      export const fooAbi = [] as const
+
+      //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+      // Test1
+      //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+      /* content test1 */
+
+      //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+      // Test2
+      //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+      /* content test2 */
+      "
+    `)
+  /* eslint-enable no-irregular-whitespace */
+})
+
+test('add new test: generates output with no plugins', async () => {
+  const { dir } = await createFixture({
+    files: {
+      tsconfig: true,
+      'wagmi.config.ts': dedent`
+          export default {
+            out: 'generated.ts',
+            contracts: [
+              {
+                abi: [],
+                name: 'Foo',
+              },
+            ],
+            plugins: [],
+          }
+        `,
+    },
+  })
+  const spy = vi.spyOn(process, 'cwd')
+  spy.mockImplementation(() => dir)
+
+  await generate()
+
+  expect(console.formatted).toMatchInlineSnapshot(`
+      "- Validating plugins
+      ✔ Validating plugins
+      - Resolving contracts
+      ✔ Resolving contracts
+      - Running plugins
+      ✔ Running plugins
+      - Writing to generated.ts
+      ✔ Writing to generated.ts"
+    `)
+  /* eslint-disable no-irregular-whitespace */
+  await expect(
+    readFile(resolve(dir, 'generated.ts'), 'utf8'),
+  ).resolves.toMatchInlineSnapshot(`
+      "//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+      // Foo
+      //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+      export const fooAbi = [] as const
+      "
+    `)
+  /* eslint-enable no-irregular-whitespace */
+})
+
+test('add new test: generates output with invalid plugin', async () => {
+  const { dir } = await createFixture({
+    files: {
+      tsconfig: true,
+      'wagmi.config.ts': dedent`
+          export default {
+            out: 'generated.ts',
+            contracts: [
+              {
+                abi: [],
+                name: 'Foo',
+              },
+            ],
+            plugins: [
+              {
+                name: 'InvalidPlugin',
+                async run({ contracts, isTypeScript, outputs }) {
+                  throw new Error('Invalid plugin')
+                },
+              },
+            ],
+          }
+        `,
+    },
+  })
+  const spy = vi.spyOn(process, 'cwd')
+  spy.mockImplementation(() => dir)
+
+  await expect(generate()).rejects.toThrowErrorMatchingInlineSnapshot(
+    '"Invalid plugin"',
+  )
+})
