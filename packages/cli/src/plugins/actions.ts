@@ -18,6 +18,12 @@ export type ActionsConfig = {
 
 type ActionsResult = Evaluate<RequiredBy<Plugin, 'run'>>
 
+/**
+ * Generates actions for contracts.
+ * 
+ * @param config - The configuration for actions.
+ * @returns The actions result.
+ */
 export function actions(config: ActionsConfig = {}): ActionsResult {
   return {
     name: 'Action',
@@ -266,6 +272,14 @@ export const ${actionName} = ${pure} ${functionName}({ ${innerContent}, eventNam
   }
 }
 
+/**
+ * Generates a documentation string for a contract action.
+ * 
+ * @param actionName - The name of the action.
+ * @param contract - The contract object.
+ * @param item - Optional item details.
+ * @returns The generated documentation string.
+ */
 function genDocString(
   actionName: string,
   contract: Contract,
@@ -287,6 +301,16 @@ function genDocString(
  */`
 }
 
+/**
+ * Generates a unique action name.
+ * 
+ * @param config - The actions configuration.
+ * @param actionNames - The set of existing action names.
+ * @param type - The type of action.
+ * @param contractName - The name of the contract.
+ * @param itemName - Optional item name.
+ * @returns The generated action name.
+ */
 function getActionName(
   config: ActionsConfig,
   actionNames: Set<string>,

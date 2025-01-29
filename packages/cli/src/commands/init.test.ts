@@ -187,3 +187,150 @@ test('behavior: displays config file location when config exists', async () => {
     console.formatted.replaceAll(configFile, 'path/to/project/wagmi.config.ts'),
   ).toMatchInlineSnapshot('"Config already exists at wagmi.config.ts"')
 })
+
+test('fix failing test: creates config file with custom content', async () => {
+  const { dir } = await createFixture()
+  const spy = vi.spyOn(process, 'cwd')
+  spy.mockImplementation(() => dir)
+
+  const customContent = {
+    out: 'custom/generated.js',
+    contracts: [],
+    plugins: [],
+  }
+
+  const configFile = await init({
+    content: customContent,
+  })
+
+  expect(fs.existsSync(configFile)).toBeTruthy()
+  expect(await fs.readFile(configFile, 'utf-8')).toMatchInlineSnapshot(`
+      "// @ts-check
+
+      /** @type {import('@wagmi/cli').Config} */
+      export default {
+        out: 'custom/generated.js',
+        contracts: [],
+        plugins: [],
+      }
+      "
+    `)
+  expect(
+    console.formatted.replaceAll(dir, 'path/to/project'),
+  ).toMatchInlineSnapshot(`
+        "- Creating config
+        ✔ Creating config
+        Config created at wagmi.config.js"
+      `)
+})
+
+test('add new test: creates config file with custom root and content', async () => {
+  const { dir } = await createFixture()
+  const spy = vi.spyOn(process, 'cwd')
+  spy.mockImplementation(() => dir)
+  fs.mkdir(resolve(dir, 'customRoot'))
+
+  const customContent = {
+    out: 'custom/generated.js',
+    contracts: [],
+    plugins: [],
+  }
+
+  const configFile = await init({
+    root: 'customRoot/',
+    content: customContent,
+  })
+
+  expect(fs.existsSync(configFile)).toBeTruthy()
+  expect(await fs.readFile(configFile, 'utf-8')).toMatchInlineSnapshot(`
+      "// @ts-check
+
+      /** @type {import('@wagmi/cli').Config} */
+      export default {
+        out: 'custom/generated.js',
+        contracts: [],
+        plugins: [],
+      }
+      "
+    `)
+  expect(
+    console.formatted.replaceAll(dir, 'path/to/project'),
+  ).toMatchInlineSnapshot(`
+        "- Creating config
+        ✔ Creating config
+        Config created at customRoot/wagmi.config.js"
+      `)
+})
+
+test('add new test: creates config file with TypeScript format and custom content', async () => {
+  const { dir } = await createFixture({
+    files: {
+      'tsconfig.json': '{}',
+    },
+  })
+  const spy = vi.spyOn(process, 'cwd')
+  spy.mockImplementation(() => dir)
+
+  const customContent = {
+    out: 'custom/generated.ts',
+    contracts: [],
+    plugins: [],
+  }
+
+  const configFile = await init({
+    content: customContent,
+  })
+
+  expect(fs.existsSync(configFile)).toBeTruthy()
+  expect(await fs.readFile(configFile, 'utf-8')).toMatchInlineSnapshot(`
+      "import { defineConfig } from '@wagmi/cli'
+
+      export default defineConfig({
+        out: 'custom/generated.ts',
+        contracts: [],
+        plugins: [],
+      })
+      "
+    `)
+  expect(
+    console.formatted.replaceAll(dir, 'path/to/project'),
+  ).toMatchInlineSnapshot(`
+        "- Creating config
+        ✔ Creating config
+        Config created at wagmi.config.ts"
+      `)
+})
+
+test('add new test: creates config file with custom root and TypeScript format', async () => {
+  const { dir } = await createFixture({
+    files: {
+      'tsconfig.json': '{}',
+    },
+  })
+  const spy = vi.spyOn(process, 'cwd')
+  spy.mockImplementation(() => dir)
+  fs.mkdir(resolve(dir, 'customRoot'))
+
+  const configFile = await init({
+    root: 'customRoot/',
+  })
+
+  expect(fs.existsSync(configFile)).toBeTruthy()
+  expect(await fs.readFile(configFile, 'utf-8')).toMatchInlineSnapshot(`
+      "import { defineConfig } from '@wagmi/cli'
+
+      export default defineConfig({
+        out: 'src/generated.ts',
+        contracts: [],
+        plugins: [],
+      })
+      "
+    `)
+  expect(
+    console.formatted.replaceAll(dir, 'path/to/project'),
+  ).toMatchInlineSnapshot(`
+        "- Creating config
+        ✔ Creating config
+        Config created at customRoot/wagmi.config.ts"
+      `)
+})
