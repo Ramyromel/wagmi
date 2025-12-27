@@ -21,11 +21,11 @@
     "express": "^4.20.0",
     "react": ">=18",
     "react-dom": ">=18",
-    "sirv": "^2.0.3",
+    "sirv": "^3.0.2",
     "ts-node": "^10.9.1",
     "viem": "2.*",
     "vike": "^0.4.142",
-    "vite": "^4.5.6",
+    "vite": "^5.4.20",
     "wagmi": "workspace:*"
   },
   "devDependencies": {
