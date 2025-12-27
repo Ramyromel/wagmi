@@ -51,7 +51,7 @@
     "happy-dom": "^15.10.2",
     "jsdom": "^20.0.3",
     "knip": "^2.29.0",
-    "publint": "^0.2.2",
+    "publint": "^0.3.0",
     "rimraf": "^4.4.1",
     "sherif": "^0.8.1",
     "simple-git-hooks": "^2.9.0",
