@@ -10,12 +10,12 @@ const cli = cac('wagmi')
 
 /**
  * Command to generate code based on configuration.
- * 
+ *
  * Options:
  * - `-c, --config <path>`: Path to config file (string)
  * - `-r, --root <path>`: Root path to resolve config from (string)
  * - `-w, --watch`: Watch for changes (boolean)
- * 
+ *
  * Example:
  * wagmi generate
  */
@@ -29,11 +29,11 @@ cli
 
 /**
  * Command to create configuration file.
- * 
+ *
  * Options:
  * - `-c, --config <path>`: Path to config file (string)
  * - `-r, --root <path>`: Root path to resolve config from (string)
- * 
+ *
  * Example:
  * wagmi init
  */

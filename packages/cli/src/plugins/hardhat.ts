@@ -81,7 +81,7 @@ export function hardhat(config: HardhatConfig): HardhatResult {
 
   /**
    * Get the contract name with an optional prefix.
-   * 
+   *
    * @param artifact - The artifact object containing the contract name.
    * @returns The contract name with the optional prefix.
    */
@@ -91,7 +91,7 @@ export function hardhat(config: HardhatConfig): HardhatResult {
 
   /**
    * Get the contract object from the artifact path.
-   * 
+   *
    * @param artifactPath - The path to the artifact file.
    * @returns The contract object containing ABI, address, and name.
    */
@@ -106,7 +106,7 @@ export function hardhat(config: HardhatConfig): HardhatResult {
 
   /**
    * Get the paths of artifact files in the artifacts directory.
-   * 
+   *
    * @param artifactsDirectory - The directory containing the artifacts.
    * @returns An array of artifact file paths.
    */

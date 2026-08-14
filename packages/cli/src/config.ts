@@ -5,7 +5,7 @@ import { type Evaluate, type MaybeArray, type MaybePromise } from './types.js'
 
 /**
  * Configuration for a contract.
- * 
+ *
  * @template chainId - The chain ID type.
  * @template requiredChainId - The required chain ID type.
  */
@@ -129,7 +129,7 @@ export type Config = {
 
 /**
  * Defines the configuration for the CLI.
- * 
+ *
  * @param config - The configuration object or function.
  * @returns The configuration.
  */
